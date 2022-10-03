@@ -1,0 +1,3 @@
+/home/semirb/CLionProjects/OOP_2/cmake-build-debug/CMakeFiles/OOP_2.dir
+/home/semirb/CLionProjects/OOP_2/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/semirb/CLionProjects/OOP_2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
