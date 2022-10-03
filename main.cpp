@@ -8,6 +8,7 @@ class VektorNd {
     }
 public:
     explicit VektorNd(int dimenzija);
+    VektorNd(std::initializer_list<double> lista);
     void PromijeniDimenziju(int nova_dimenzija);
     void PostaviKoordinatu(int indeks, double vrijednost) {
         TestIndeksa(indeks); koordinate[indeks - 1] = vrijednost;
@@ -20,12 +21,21 @@ public:
     }
     void Ispisi() const;
     int DajTrenutnuDimenziju() const { return dimenzija; }
+    double *begin() const { return koordinate; }
+    double *end() const { return koordinate + dimenzija; }
 };
 
 //konstruktor
 VektorNd::VektorNd(int dimenzija) : dimenzija(dimenzija),
                                     koordinate(new double[dimenzija]) {
     std::fill(koordinate, koordinate + dimenzija, 0);
+}
+
+//sekvencijski konstruktor
+VektorNd::VektorNd(std::initializer_list<double> lista) :
+    dimenzija(lista.size()),
+    koordinate(new double[lista.size()]) {
+        std::copy(lista.begin(), lista.end(), koordinate);
 }
 
 void VektorNd::PromijeniDimenziju(int nova_dimenzija) {
@@ -64,6 +74,12 @@ int main() {
         v2.PromijeniDimenziju(2);
         std::cout << v2.DajTrenutnuDimenziju() << std::endl;
         v2.Ispisi();
+        std::cout << std::endl;
+
+        VektorNd v3{3, 5, 2, 6, 1};
+        v3.Ispisi();
+        std::cout << std::endl;
+        std::cout << v3.DajTrenutnuDimenziju() << std::endl;
     }
     catch(std::bad_alloc) {
         std::cout << "Problemi sa memorijom!\n";
