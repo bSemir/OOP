@@ -9,6 +9,9 @@ class VektorNd {
 public:
     explicit VektorNd(int dimenzija);
     VektorNd(std::initializer_list<double> lista);
+    VektorNd(const VektorNd &v);
+    VektorNd(VektorNd &&v);
+    ~VektorNd() { delete[] koordinate; }
     void PromijeniDimenziju(int nova_dimenzija);
     void PostaviKoordinatu(int indeks, double vrijednost) {
         TestIndeksa(indeks); koordinate[indeks - 1] = vrijednost;
@@ -23,6 +26,7 @@ public:
     int DajTrenutnuDimenziju() const { return dimenzija; }
     double *begin() const { return koordinate; }
     double *end() const { return koordinate + dimenzija; }
+    friend VektorNd ZbirVektora(const VektorNd& v1, const VektorNd& v2);
 };
 
 //konstruktor
@@ -37,6 +41,16 @@ VektorNd::VektorNd(std::initializer_list<double> lista) :
     koordinate(new double[lista.size()]) {
         std::copy(lista.begin(), lista.end(), koordinate);
 }
+
+//kopirajuci konstruktor
+VektorNd::VektorNd(const VektorNd &v) :
+    dimenzija(v.dimenzija),
+    koordinate(new double [v.dimenzija]) {
+        std::copy(v.koordinate, v.koordinate + v.dimenzija, koordinate);
+}
+
+//pomjerajuci konstruktor
+VektorNd::VektorNd(VektorNd &&v) : dimenzija(v.dimenzija), koordinate(v.koordinate) { v.koordinate = nullptr; }
 
 void VektorNd::PromijeniDimenziju(int nova_dimenzija) {
     if(nova_dimenzija > dimenzija) {
@@ -59,6 +73,15 @@ void VektorNd::Ispisi() const {
     std::cout << "}";
 }
 
+VektorNd ZbirVektora(const VektorNd& v1, const VektorNd& v2) { //kako bi izbjegli kopiranji
+    if(v1.dimenzija != v2.dimenzija)
+        throw std::domain_error("Nesaglasne dimenzije");
+    VektorNd v3(v1.dimenzija);
+    for(int i = 0; i < v1.dimenzija; i++)
+        v3.koordinate[i] = v1.koordinate[i] + v2.koordinate[i];
+    return v3;
+}
+
 int main() {
 
     try {
@@ -70,7 +93,7 @@ int main() {
         std::cout << v1.DajKoordinatu(2) << std::endl;
         v1.Ispisi(); std::cout<< " "; v2.Ispisi();
 
-        std::cout << "###\n";
+        std::cout << std::endl << "###\n";
         v2.PromijeniDimenziju(2);
         std::cout << v2.DajTrenutnuDimenziju() << std::endl;
         v2.Ispisi();
@@ -80,6 +103,18 @@ int main() {
         v3.Ispisi();
         std::cout << std::endl;
         std::cout << v3.DajTrenutnuDimenziju() << std::endl;
+
+        std::cout << "Zbir: ";
+        VektorNd v4{1, 2, 3};
+        VektorNd v5{4, 5, 6};
+        VektorNd zbir = ZbirVektora(v4, v5); //u slucaju da nije ovakav poziv, ne bi se pozvao kopirajuci konstruktor?
+        zbir.Ispisi();
+        std::cout << std::endl;
+
+        VektorNd v6{9,9};
+        VektorNd v7 = std::move(v6);
+        v7.Ispisi(); // 9,9
+        std::cout << std::endl;
     }
     catch(std::bad_alloc) {
         std::cout << "Problemi sa memorijom!\n";
