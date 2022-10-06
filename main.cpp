@@ -12,6 +12,8 @@ public:
     VektorNd(const VektorNd &v);
     VektorNd(VektorNd &&v);
     ~VektorNd() { delete[] koordinate; }
+    VektorNd &operator =(const VektorNd &v);
+    VektorNd &operator =(VektorNd &&v);
     void PromijeniDimenziju(int nova_dimenzija);
     void PostaviKoordinatu(int indeks, double vrijednost) {
         TestIndeksa(indeks); koordinate[indeks - 1] = vrijednost;
@@ -62,6 +64,26 @@ void VektorNd::PromijeniDimenziju(int nova_dimenzija) {
         delete[] koordinate; koordinate = novo_mjesto;
     }
     dimenzija = nova_dimenzija;
+}
+
+//kopirajuci operator dodjele
+VektorNd &VektorNd::operator=(const VektorNd &v) {
+    if(dimenzija < v.dimenzija){
+        double *novi_prostor = new double[v.dimenzija];
+        delete[] koordinate; koordinate = novi_prostor;
+    }
+    dimenzija = v.dimenzija;
+    std::copy(v.koordinate, v.koordinate + v.dimenzija, koordinate);
+    return *this;
+}
+
+//pomjerajuci operator dodjele
+VektorNd &VektorNd::operator=(VektorNd &&v) {
+    std::swap(dimenzija, v.dimenzija);
+    std::swap(koordinate, v.koordinate);
+    return *this;
+    //ovako bi mogao biti implementiran i kopirajuci op.dodjele ali onda ne bi bilo jasno koji bi se pozivao jer
+    //oba mogu prihvatiti privremeni objekat
 }
 
 void VektorNd::Ispisi() const {
@@ -115,8 +137,18 @@ int main() {
         VektorNd v7 = std::move(v6);
         v7.Ispisi(); // 9,9
         std::cout << std::endl;
+
+        VektorNd v8{5, 5, 5};
+        VektorNd v9{7, 7, 7};
+        v8 = v9;
+        v8.Ispisi(); // 7,7,7
+        std::cout << std::endl;
+
+        VektorNd v10(1);
+        v10 = ZbirVektora(v4,v5);
+        v10.Ispisi(); // {5,7,9}
     }
-    catch(std::bad_alloc) {
+    catch(std::bad_alloc const &) {
         std::cout << "Problemi sa memorijom!\n";
     }
 
