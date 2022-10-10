@@ -95,7 +95,7 @@ void VektorNd::Ispisi() const {
     std::cout << "}";
 }
 
-VektorNd ZbirVektora(const VektorNd& v1, const VektorNd& v2) { //kako bi izbjegli kopiranji
+VektorNd ZbirVektora(const VektorNd& v1, const VektorNd& v2) { //kako bi izbjegli kopiranje
     if(v1.dimenzija != v2.dimenzija)
         throw std::domain_error("Nesaglasne dimenzije");
     VektorNd v3(v1.dimenzija);
