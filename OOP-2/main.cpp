@@ -36,7 +36,8 @@ class Razred {
 public:
     explicit Razred(int broj_ucenika) : kapacitet(broj_ucenika), broj_evidentiranih(0), ucenici(new Ucenik*[broj_ucenika]{}) {}
     ~Razred();
-    Razred(const Razred &r) = delete; //zabranjeno kopiranje
+   // Razred(const Razred &r) = delete; //zabranjeno kopiranje
+    Razred(const Razred &r); // u slucaju da zelimo podrzati kopiranje
     Razred &operator =(const Razred &r) = delete; //zabranjeno dodjeljivanje
     void EvidentirajUcenika(Ucenik *ucenik);
     void UnesiNovogUcenika();
@@ -112,6 +113,20 @@ Razred::~Razred() {
     for(int i = 0; i < broj_evidentiranih; i++)
         delete ucenici[i];
     delete[] ucenici;
+}
+
+Razred::Razred(const Razred &r) : ucenici(new Ucenik *[r.kapacitet]{}),
+    kapacitet(r.kapacitet), broj_evidentiranih(r.broj_evidentiranih) {
+    try {
+        for(int i = 0; i < r.broj_evidentiranih; i++)
+            ucenici[i] = new Ucenik(*r.ucenici[i]);
+    }
+    catch(...) {
+        for(int i = 0; i < r.broj_evidentiranih; i++)
+            delete ucenici[i];
+        delete[] ucenici;
+        throw;
+    }
 }
 
 void Razred::EvidentirajUcenika(Ucenik *ucenik) {

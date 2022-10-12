@@ -55,6 +55,12 @@ build CMakeFiles/OOP_2.dir/OOP-1/main.cpp.o: CXX_COMPILER__OOP_2_Debug /home/sem
   OBJECT_DIR = CMakeFiles/OOP_2.dir
   OBJECT_FILE_DIR = CMakeFiles/OOP_2.dir/OOP-1
 
+build CMakeFiles/OOP_2.dir/OOP-3/main.cpp.o: CXX_COMPILER__OOP_2_Debug /home/semirb/CLionProjects/OOP_2/OOP-3/main.cpp || cmake_object_order_depends_target_OOP_2
+  DEP_FILE = CMakeFiles/OOP_2.dir/OOP-3/main.cpp.o.d
+  FLAGS = -g -std=gnu++14
+  OBJECT_DIR = CMakeFiles/OOP_2.dir
+  OBJECT_FILE_DIR = CMakeFiles/OOP_2.dir/OOP-3
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target OOP_2
@@ -63,7 +69,7 @@ build CMakeFiles/OOP_2.dir/OOP-1/main.cpp.o: CXX_COMPILER__OOP_2_Debug /home/sem
 #############################################
 # Link the executable OOP_2
 
-build OOP_2: CXX_EXECUTABLE_LINKER__OOP_2_Debug CMakeFiles/OOP_2.dir/OOP-1/main.cpp.o
+build OOP_2: CXX_EXECUTABLE_LINKER__OOP_2_Debug CMakeFiles/OOP_2.dir/OOP-1/main.cpp.o CMakeFiles/OOP_2.dir/OOP-3/main.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/OOP_2.dir
   POST_BUILD = :
